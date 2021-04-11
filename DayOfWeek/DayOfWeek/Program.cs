@@ -62,7 +62,7 @@ namespace DayOfWeek
         }
         static void DayOF(string day, int i)
         {
-            var todayDay = Convert.ToInt32(DateTime.Now.DayOfWeek);
+            var todayDay = (int)DateTime.Now.DayOfWeek;
             int daysTillNext = todayDay >= i ? i + 7 - todayDay : i - todayDay;
 
             Console.WriteLine($"The next {day} will be on ");
