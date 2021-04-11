@@ -17,7 +17,7 @@ namespace TaskString4
                 {
                     if (text1[i] == text2[i])
                     {
-
+continue;
                     }
 
                     else
