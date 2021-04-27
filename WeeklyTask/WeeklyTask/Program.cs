@@ -2,78 +2,68 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-namespace WeeklyTask
+namespace WeeklyTaskk
 {
     class Programm
     {
+        private static WeeklyTaskService servis = new WeeklyTaskService();
+
         public static void Main()
         {
-            StartMenu();
+            RunInLoop();
+
         }
-        public static void StartMenu()
+
+        private static void RunInLoop()
         {
-            var taskList = new List<CreateTask>();
-            string inputConsole = default;
-            while (inputConsole != "3")
+            string input = null;
+            while (input != "exit")
             {
-                Console.WriteLine("\tSelect an action \n " +
-                    "\t1 - add new task\n" +
-                    "\t2 - view all tasks\n" +
-                    "\t3 - exit\n");
-                inputConsole = Console.ReadLine();
-                var input = int.TryParse(inputConsole, out var inputParse);
-
-                if (input)
+                PrintMenu();
+                input = Console.ReadLine();
+                if (int.TryParse(input, out var parsedInput))
                 {
-                    switch (inputParse)
-                    {
-                        case 1:
-                            taskList.Add(CreateTasker());
-                            break;
-                    }
-
+                    HandelComand(parsedInput);
                 }
-
                 else
                 {
-                    Console.WriteLine($"Invalid value  --  {inputParse}  -- ");
-                }
-
-            }
-        }
-        public static CreateTask CreateTasker()
-        {
-            Console.WriteLine(" please input in format (name task),(11.11.1111) (00:00:00),(priority Low or Medium or High)");
-            string task = (Console.ReadLine()).Trim();
-
-            var array = task.Split(',');
-            for (var i = 0; i < array.Length; i++)
-            {
-                array[i] = array[i].Trim();
-            }
-
-            return array.Length switch
-            {
-                1 => new CreateTask(array[0]),
-                2 => new CreateTask(array[0], DateTime.Parse(array[1])),
-                _ => new CreateTask(array[0], DateTime.Parse(array[1]), StringToPriority(array[2])),
-            };
-        }
-        public static Priority StringToPriority(string priorityString)
-        {
-            while (true)
-            {
-                switch (priorityString.ToLower(System.Globalization.CultureInfo.CurrentCulture))
-                {
-                    case "low":
-                        return Priority.Low;
-                    case "medium":
-                        return Priority.Medium;
-                    case "high":
-                        return Priority.High;
-
+                    Console.WriteLine("Invalid comand, tru again");
                 }
             }
+        }
+
+        static void HandelComand(int parsedInput)
+        {
+            switch (parsedInput)
+            {
+                case 1:
+                    WeeklyTaskService.HandleAddNewTask();
+                    break;
+                case 2:
+                    WeeklyTaskService.HandleList();
+                    break;
+                case 3:
+                    WeeklyTaskService.HandleEdit();
+                    break;
+                case 4:
+                    WeeklyTaskService.FilterTaskByPriority();
+                    break;
+                case 5:
+                    WeeklyTaskService.FilterTaskByDate();
+                    break;
+            }
+        }
+
+        public static void PrintMenu()
+        {
+            Console.WriteLine(
+            @"Choose a command:
+1. Add new task
+2. Print all tasks
+3. Update task
+4. Filter task by date
+5. Filter task by priority");
         }
     }
 }
+
