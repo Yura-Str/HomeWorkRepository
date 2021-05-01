@@ -7,41 +7,32 @@ namespace BankLibrary
     {
         private const string KgkPassPhrase = "CleanUp";
         private readonly List<Account> _accounts = new();
-        private readonly List<Locker> _lockers = new();
+        private readonly Dictionary <Locker, Locker> _accountsDict = new Dictionary<Locker, Locker>();
 
-        public int AddLocker(string keyword, object data)
+        public object Addaccount(string passWorld, string userName, object data)
         {
-            var locker = new Locker(_lockers.Count + 1, keyword, data);
-            _lockers.Add(locker);
-            return locker.Id;
+            Locker userInfo = new Locker(passWorld, userName);
+            Locker userData = new Locker( data);
+            _accountsDict.Add(userInfo, userData);
+            return (Convert.ToString(_accountsDict.Keys));
         }
 
-        public object GetLockerData(int id, string keyword)
+        public object GetLockerData(string passWorld, string userName)
         {
-            foreach (Locker locker in _lockers)
-            {
-                if (locker.Matches(id, keyword))
-                {
-                    return locker.Data;
-                }
-            }
-
-            throw new ArgumentOutOfRangeException(
-                $"Cannot find locker with ID: {id} or keyword does not match");
-        }
-
-        public TU GetLockerData<TU>(int id, string keyword)
-        {
-            return (TU)GetLockerData(id, keyword);
+            string result;
+            Locker userInfo = new Locker(passWorld, userName);
+            return   Convert.ToString(_accountsDict[userInfo]);
+         //   throw new ArgumentOutOfRangeException(
+              //  $"you entered incorrect username or password");
         }
 
         public void VisitKgk(string passPhrase)
         {
             if (passPhrase.Equals(KgkPassPhrase))
             {
-                foreach (var locker in _lockers)
+                foreach (var key in _accountsDict.Keys)
                 {
-                    locker.RemoveData();
+                    _accountsDict[key] = null;
                 }
             }
         }
