@@ -1,29 +1,22 @@
 namespace BankLibrary
 {
-    public class Locker
+    class Locker
     {
         private object _data;
-        private string _keyword;
-        private int _id;
+        private string _passWorld;
+        private string _userName;
 
-        public Locker(int id, string keyword, object data)
+        public Locker(string passWorld, string userName)
         {
-            _id = id;
-            _keyword = keyword;
+            _passWorld = passWorld;
+            _userName = userName;
+        }
+        public Locker(object data)
+        {
             _data = data;
         }
 
-        public int Id => _id;
-        public object Data => _data;
 
-        public bool Matches(int id, string keyword)
-        {
-            return (_id == id) && (_keyword.Equals(keyword));
-        }
 
-        public void RemoveData()
-        {
-            _data = null;
-        }
     }
 }
